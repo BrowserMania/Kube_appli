@@ -1,16 +1,48 @@
-name: Rust
+name: Rust-analise
 on:
   push:
     branches:
-    - '*'
+    - 'main'
 
 env:
   CARGO_TERM_COLOR: always
 
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: Run Clippy
+#      run: cargo clippy --all-targets --all-features
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+ semgrep_rust:
+    name: semgrep_rust
+    runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v4
-    - name: Run Clippy
-      run: cargo clippy --all-targets --all-features
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: fmt-2
+        run: cargo fmt
+      - name: fmt
+        run: cargo fmt --check
+      - name : change source
+        run: source /home/runner-admin/semgrep/bin/activate
+      - name: Analyse semgrep 1
+        run: semgrep --config "p/rust" .
+ audit:
+    needs: semgrep_rust
+    name: audit-code
+    runs-on: self-hosted
+    continue-on-error: true
+    steps:
+      - name: cargo-audit
+        run: cargo audit
+ clippy:
+    needs: audit
+    name: clippy-code
+    runs-on: self-hosted
+    continue-on-error: true
+    steps:
+      - name: Clippy-analyse
+        run: cargo clippy
