@@ -1,9 +1,9 @@
 //use kube::{Client, Api};
-use anyhow;
+//use anyhow;
 use k8s_openapi::api::apps::v1::{Deployment, DeploymentSpec};
 use k8s_openapi::api::core::v1::{Container, Namespace, Pod, PodSpec, PodTemplateSpec};
 use kube::{
-    api::{Api, PostParams},
+    api::{Api, PostParams, AttachParams},
     Client,
 };
 
@@ -30,6 +30,23 @@ pub async fn spawn_namespace(mut user: String) -> anyhow::Result<()> {
     Ok(())
     /*Ok(result.metadata.name.unwrap())
      */
+}
+
+//à tester
+// elle fonctionne que dalle cette conne
+#[tokio::main]
+pub async fn exec_cmd_pod(user: String) -> anyhow::Result<()> {
+    let pod = format!("{user}-browser");
+    let namespace = format!("{user}-namespace");
+
+    let putain_de_commande = vec!["ls"];
+    let client = Client::try_default().await?;
+
+    let pods: Api<Pod> = Api::namespaced(client, &namespace);
+    let attach_params = AttachParams::default().stderr(true).stdout(true).stdin(false);
+    pods.exec(&pod, putain_de_commande, &attach_params).await?;
+    // println!("result = {}", attached); //ligne qui plante car debug pas implément, tester autre chose
+    Ok(())
 }
 
 #[tokio::main]
