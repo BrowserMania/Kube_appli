@@ -5,11 +5,11 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.89"
-kube = { version = "0.87.2", features = ["client","runtime", "derive", "rustls-tls"] }
+kube = { version = "0.87.2", features = ["client","runtime", "derive", "rustls-tls","ws"] }
 k8s-openapi = { version = "0.20.0", features = ["latest"] }
 tokio = { version = "1.40.0", features = ["full"] }  # Use the latest version
 tracing = "0.1.40"
-clap = { version = "4.5.20", default-features = false, features = ["std", "cargo", "derive"] }
+clap = { version = "4.5.20", d-features = false, features = ["std", "cargo", "derive"] }
 futures = "0.3.31"
 
 
