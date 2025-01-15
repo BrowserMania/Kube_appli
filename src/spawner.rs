@@ -3,7 +3,7 @@
 use k8s_openapi::api::apps::v1::{Deployment, DeploymentSpec};
 use k8s_openapi::api::core::v1::{Container, Namespace, Pod, PodSpec, PodTemplateSpec};
 use kube::{
-    api::{Api, PostParams, AttachParams},
+    api::{Api, AttachParams, PostParams},
     Client,
 };
 
@@ -43,7 +43,10 @@ pub async fn exec_cmd_pod(user: String) -> anyhow::Result<()> {
     let client = Client::try_default().await?;
 
     let pods: Api<Pod> = Api::namespaced(client, &namespace);
-    let attach_params = AttachParams::default().stderr(true).stdout(true).stdin(false);
+    let attach_params = AttachParams::default()
+        .stderr(true)
+        .stdout(true)
+        .stdin(false);
     pods.exec(&pod, putain_de_commande, &attach_params).await?;
     // println!("result = {}", attached); //ligne qui plante car debug pas implément, tester autre chose
     Ok(())
