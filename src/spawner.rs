@@ -57,11 +57,11 @@ pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let client = Client::try_default().await?;
     println!("Votre user est {}", user);
-
+    println!("{}", user.to_string());
     let pod = Pod {
         metadata: kube::api::ObjectMeta {
             name: Some(user.to_string()),
-            namespace: Some(user.to_string()),
+            //namespace: Some(user.to_string()),
             ..Default::default()
         },
         spec: Some(PodSpec {
