@@ -61,6 +61,7 @@ pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
     let pod = Pod {
         metadata: kube::api::ObjectMeta {
             name: Some(user.to_string()),
+            namespace: Some(user.to_string()),
             ..Default::default()
         },
         spec: Some(PodSpec {
@@ -69,6 +70,7 @@ pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
                 image: Some("runner".to_string()),
                 ..Default::default()
             }],
+            runtime_class_name: Some("kata".to_string()),
             ..Default::default()
         }),
         ..Default::default()
