@@ -3,11 +3,11 @@ mod info;
 mod logs;
 mod policy;
 mod spawner;
+use anyhow;
 use std::{
     env,
     //    os
 };
-use anyhow;
 
 fn main() -> anyhow::Result<()> {
     let args: Vec<String> = env::args().collect();
