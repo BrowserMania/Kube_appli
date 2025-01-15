@@ -13,13 +13,9 @@ pub async fn del_namespace(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let client = Client::try_default().await?;
     println!("Votre user est {}", user);
-
     let namespace: Api<Namespace> = Api::all(client);
-
     let delete_params = DeleteParams::default();
-
     let result = namespace.delete("{user}", &delete_params).await?;
-
     println!("namespace {:?}  supprimé", result);
     Ok(())
     /*Ok(result.metadata.name.unwrap())
