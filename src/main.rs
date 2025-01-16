@@ -62,8 +62,8 @@ async fn penis(cred: extract::Json<ListUser>) -> impl IntoResponse {
 
 async fn create_session(cred: extract::Json<func_api::object::User>) -> impl IntoResponse {
     let user = &cred.id;
-    let _ = func_api::spawner::spawn_namespace(user.to_string());
-    let _ = func_api::spawner::spawn_pod(user.to_string());
+    let _ = func_api::spawner::spawn_namespace(user.to_string()).await;
+    let _ = func_api::spawner::spawn_pod(user.to_string()).await;
     (StatusCode::OK, "Correct connection en cours");
 }
 
