@@ -28,7 +28,8 @@ pub async fn del_pod(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let client = Client::try_default().await?; //connect api
     println!("Votre user est {}", user);
-    let pods: Api<Pod> = Api::default_namespaced(client); //def truc a supp
+    let pods: Api<Pod> = Api::namespaced(client, &user);
+    //let pods: Api<Pod> = Api::default_namespaced(client); //def truc a supp
     let delete_params = DeleteParams::default();
     let result = pods.delete(&user, &delete_params).await?; //ntm a pas fonctionné avec ton ptn "user"
     println!("deleted pod {:?}", result);
