@@ -69,8 +69,8 @@ async fn create_session(cred: extract::Json<func_api::object::User>) -> impl Int
 
 async fn delete_session(cred: extract::Json<func_api::object::User>) -> impl IntoResponse {
     let user = &cred.id;
-    let _ = func_api::delete::del_namespace(user.to_string());
-    let _ = func_api::delete::del_pod(user.to_string());
+    let _ = func_api::delete::del_namespace(user.to_string()).await;
+    let _ = func_api::delete::del_pod(user.to_string()).await;
     (StatusCode::OK, "Correct connection en cours");
 }
 
