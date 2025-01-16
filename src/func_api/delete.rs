@@ -8,7 +8,6 @@ use kube::{
     //core_methods::Api,
 };
 
-#[tokio::main]
 pub async fn del_namespace(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let client = Client::try_default().await?;
@@ -25,7 +24,6 @@ pub async fn del_namespace(mut user: String) -> anyhow::Result<()> {
      */
 }
 
-#[tokio::main]
 pub async fn del_pod(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let client = Client::try_default().await?; //connect api
