@@ -11,8 +11,6 @@ use kube::{
 pub async fn spawn_namespace(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let client = Client::try_default().await?;
-    println!("Votre user est {}", user);
-
     let namespace = Namespace {
         metadata: kube::api::ObjectMeta {
             name: Some(user.to_string()),
@@ -57,7 +55,7 @@ pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
     let pod = Pod {
         metadata: kube::api::ObjectMeta {
             name: Some(user.to_string()),
-            namespace: Some(user.to_string()),
+            //namespace: Some(user.to_string()),
             ..Default::default()
         },
         spec: Some(PodSpec {
@@ -71,7 +69,7 @@ pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
         }),
         ..Default::default()
     };
-    let pods: Api<Pod> = Api::default_namespaced(client); //voir ici pour mettre un lien
+    let pods: Api<Pod> = Api::namespaced(client, &user); //voir ici pour mettre un lien
     let result = pods.create(&PostParams::default(), &pod).await?;
     println!("Nouveau pod crée, {}", result.metadata.name.unwrap());
     Ok(())
