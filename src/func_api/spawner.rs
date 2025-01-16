@@ -8,7 +8,6 @@ use kube::{
 };
 
 //gestion des username fait par badr côté bdd
-#[tokio::main]
 pub async fn spawn_namespace(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let client = Client::try_default().await?;
@@ -34,7 +33,6 @@ pub async fn spawn_namespace(mut user: String) -> anyhow::Result<()> {
 
 //à tester
 // elle fonctionne que dalle cette conne
-#[tokio::main]
 pub async fn exec_cmd_pod(user: String) -> anyhow::Result<()> {
     let pod = format!("{user}-browser");
     let namespace = format!("{user}-namespace");
@@ -52,7 +50,6 @@ pub async fn exec_cmd_pod(user: String) -> anyhow::Result<()> {
     Ok(())
 }
 
-#[tokio::main]
 pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let client = Client::try_default().await?;
@@ -80,7 +77,6 @@ pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
     Ok(())
 }
 
-#[tokio::main]
 pub async fn deployment(mut user: String, mut nm: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     nm = format!("{nm}-browser");
