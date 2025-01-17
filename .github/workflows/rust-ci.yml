@@ -44,3 +44,11 @@ jobs:
     steps:
       - name: Clippy-analyse
         run: cargo clippy
+ compile:
+    needs: clippy
+    name: compile-code-for-dockerfile
+    runs-on: self-hosted
+    continue-on-error: true
+    steps:
+      - name: Build-static
+        run: cargo build --release --target x86_64-unknown-linux-musl
