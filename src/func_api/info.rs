@@ -4,7 +4,6 @@ use kube::{Api, Client};
 use anyhow;
 //use std::error::Error;
 
-#[tokio::main]
 pub async fn pods() -> anyhow::Result<()> {
 //    let config = kube::Config::from_kubeconfig(&kube::config::KubeConfigOptions::default()).await?;
 //    let client = Client::try_from(config)?;

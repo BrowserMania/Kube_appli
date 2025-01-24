@@ -52,7 +52,7 @@ pub async fn exec_cmd_pod(user: String) -> anyhow::Result<()> {
 pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let mut labels = BTreeMap::new();
-    labels.insert("name".to_string(), "browser".to_string());
+    labels.insert("app".to_string(), "browser".to_string());
     let client = Client::try_default().await?;
     println!("Votre user est {}", user);
     let pod = Pod {
