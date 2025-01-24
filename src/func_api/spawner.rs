@@ -6,6 +6,7 @@ use kube::{
     api::{Api, AttachParams, PostParams},
     Client,
 };
+use std::collections::BTreeMap;
 
 //gestion des username fait par badr côté bdd
 pub async fn spawn_namespace(mut user: String) -> anyhow::Result<()> {
@@ -50,10 +51,13 @@ pub async fn exec_cmd_pod(user: String) -> anyhow::Result<()> {
 
 pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
+    let mut labels = BTreeMap::new();
+    labels.insert("app".to_string(), "browser".to_string());
     let client = Client::try_default().await?;
     println!("Votre user est {}", user);
     let pod = Pod {
         metadata: kube::api::ObjectMeta {
+            labels: Some(labels),
             name: Some(user.to_string()),
             //namespace: Some(user.to_string()),
             ..Default::default()
