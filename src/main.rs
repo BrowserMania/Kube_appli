@@ -3,6 +3,7 @@ mod func_api {
     pub mod object;
     pub mod policy;
     pub mod spawner;
+    pub mod info;
 }
 
 use axum::{
@@ -74,6 +75,11 @@ async fn delete_session(cred: extract::Json<func_api::object::User>) -> impl Int
     (StatusCode::OK, "Correct connection en cours");
 }
 
+async fn list_pods() {
+    let _ = func_api::info::pods().await;
+    (StatusCode::OK, "Correct connection en cours");
+}
+
 #[tokio::main]
 async fn main() {
     let app = Router::new()
@@ -81,7 +87,8 @@ async fn main() {
         .route("/users/list", post(penis))
         .route("/session/new", post(create_session))
         .route("/session/del", post(delete_session))
-        .route("/user/new", post(create_user));
+        .route("/user/new", post(create_user))
+        .route("/session/list", get(list_pods().await));
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
