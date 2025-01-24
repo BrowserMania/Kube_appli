@@ -53,6 +53,7 @@ pub async fn spawn_pod(mut user: String) -> anyhow::Result<()> {
     user = format!("{user}-browser");
     let mut labels = BTreeMap::new();
     labels.insert("app.kubernetes.io/name".to_string(), "browser".to_string());
+    println!("{:?}", labels);
     let client = Client::try_default().await?;
     println!("Votre user est {}", user);
     let pod = Pod {
