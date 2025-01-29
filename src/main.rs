@@ -1,9 +1,9 @@
 mod func_api {
     pub mod delete;
+    pub mod info;
     pub mod object;
     pub mod policy;
     pub mod spawner;
-    pub mod info;
 }
 
 use axum::{
@@ -88,7 +88,10 @@ async fn main() {
         .route("/session/new", post(create_session))
         .route("/session/del", post(delete_session))
         .route("/user/new", post(create_user))
-        .route("/session/list", get(list_pods().await));
+        .route("/session/list", {
+                    list_pods().await;
+                    get(())
+                });
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
