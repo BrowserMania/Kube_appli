@@ -28,8 +28,25 @@ jobs:
         run: source /home/runner-admin/semgrep/bin/activate
       - name: Analyse semgrep 1
         run: semgrep --config "p/rust" .
- audit:
+ 
+ remove_dep:
     needs: semgrep_rust
+    name: demove_dep
+    runs-on: self-hosted
+    steps: 
+     - name: cargo-vet-init
+       run: cargo vet init
+     - name: cargo-vet
+       run: cargo vet
+ third-part:
+    needs: remove_dep
+    name: third-part
+    runs-on: self-hosted
+    steps: 
+     - name: cargo-machete
+       run: cargo machete
+ audit:
+    needs: third-part
     name: audit-code
     runs-on: self-hosted
     continue-on-error: true
