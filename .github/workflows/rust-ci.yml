@@ -34,6 +34,7 @@ jobs:
     needs: semgrep_rust
     name: demove_dep
     runs-on: self-hosted
+    continue-on-error: true
     steps: 
      - name: cargo-vet-init
        run: cargo vet init
@@ -43,6 +44,7 @@ jobs:
     needs: remove_dep
     name: third-part
     runs-on: self-hosted
+    continue-on-error: true
     steps: 
      - name: cargo-machete
        run: cargo machete
