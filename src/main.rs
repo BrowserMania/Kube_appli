@@ -89,9 +89,9 @@ async fn main() {
         .route("/session/del", post(delete_session))
         .route("/user/new", post(create_user))
         .route("/session/list", {
-                    list_pods().await;
-                    get(())
-                });
+            list_pods().await;
+            get(())
+        });
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
