@@ -4,7 +4,7 @@ use kube::api::ListParams;
 use kube::{Api, Client};
 //use std::error::Error;
 
-pub async fn pods() -> anyhow::Result<()> {
+pub async fn pods() -> Result<Vec<String>, anyhow::Error> {
     //    let config = kube::Config::from_kubeconfig(&kube::config::KubeConfigOptions::default()).await?;
     //    let client = Client::try_from(config)?;
     //
@@ -18,16 +18,19 @@ pub async fn pods() -> anyhow::Result<()> {
     let client = Client::try_default().await?;
     let pods: Api<Pod> = Api::all(client);
 
-    let list_params = ListParams::default().labels("browser");
+    //let list_params = ListParams::default().labels("browser");
+    let list_params = ListParams::default();
 
     let pod_list = pods.list(&list_params).await?;
+    let mut pod_list_json = Vec::new();
 
     for pod in pod_list {
         if let Some(name) = pod.metadata.name {
             println!("Found Pod: {}", name);
+            pod_list_json.push(name);
         }
     }
-    Ok(())
+    Ok(pod_list_json)
 }
 
 #[tokio::main]
