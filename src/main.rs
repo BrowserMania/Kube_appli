@@ -10,6 +10,7 @@ use axum::{
     extract,
     http::StatusCode,
     response::IntoResponse,
+    response::Json,
     routing::{get, post},
     Router,
 };
@@ -17,6 +18,7 @@ use serde::{
     Deserialize,
     //    Serialize,
 };
+use serde_json::json;
 
 //async fn get_session() -> &'static str{
 //    "Get_session de toto"
@@ -76,8 +78,18 @@ async fn delete_session(cred: extract::Json<func_api::object::User>) -> impl Int
 }
 
 async fn list_pods() -> impl IntoResponse {
-    let _ = func_api::info::pods().await;
-    (StatusCode::OK, "Correct connection en cours");
+    //let _ = func_api::info::pods().await;
+    //(StatusCode::OK, "Correct connection en cours");
+    match func_api::info::pods().await {
+        Ok(pods) => {
+            let response = json!({ "pods": pods });
+            (StatusCode::OK, Json(response))
+        }
+        Err(e) => {
+            let error_response = json!({ "error": e.to_string() });
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(error_response))
+        }
+    }
 }
 
 #[tokio::main]
