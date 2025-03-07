@@ -75,19 +75,20 @@ async fn delete_session(cred: extract::Json<func_api::object::User>) -> impl Int
     (StatusCode::OK, "Correct connection en cours");
 }
 
-async fn list_pods() {
+async fn list_pods() -> impl IntoResponse {
     let _ = func_api::info::pods().await;
     (StatusCode::OK, "Correct connection en cours");
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() { 
     let app = Router::new()
         .route("/", get(|| async { "Hello, World!" }))
         .route("/users/list", post(penis))
         .route("/session/new", post(create_session))
         .route("/session/del", post(delete_session))
         .route("/user/new", post(create_user))
+        .route("/pods/list", get(list_pods))
         .route("/session/list", {
             list_pods().await;
             get(())
