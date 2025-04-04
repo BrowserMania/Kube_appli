@@ -1,5 +1,6 @@
 use anyhow;
 use k8s_openapi::api::core::v1::{Namespace, Pod};
+use k8s_openapi::api::networking::v1::NetworkPolicy;
 use kube::api::ListParams;
 use kube::{Api, Client};
 //use std::error::Error;
@@ -51,4 +52,25 @@ pub async fn namespace() -> anyhow::Result<()> {
         Err(_e) => todo!(),
     }
     Ok(())
+}
+
+
+/*
+ Pour le moment on work avec des network policy, pas des cilium le CRD plante, 
+ */
+
+pub async fn networking_rule() -> Result<Vec<String>, anyhow::Error> {
+    let client = Client::try_default().await?;
+    let policy: Api<NetworkPolicy> = Api::all(client);
+
+    let policy_list = policy.list(&ListParams::default()).await?;
+    let mut vec_policy = Vec::new();
+    
+    for element in policy_list {
+        if let Some(name) = element.metadata.name {
+            println!("Policy name: {}", name);
+            vec_policy.push(name);
+        }
+    }
+    Ok(vec_policy)
 }
