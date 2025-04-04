@@ -92,6 +92,21 @@ async fn list_pods() -> impl IntoResponse {
     }
 }
 
+async fn list_policy() -> impl IntoResponse {
+    //let _ = func_api::info::pods().await;
+    //(StatusCode::OK, "Correct connection en cours");
+    match func_api::info::networking_rule().await {
+        Ok(policy) => {
+            let response = json!({ "pods": policy });
+            (StatusCode::OK, Json(response))
+        }
+        Err(e) => {
+            let error_response = json!({ "error": e.to_string() });
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(error_response))
+        }
+    }
+}
+
 #[tokio::main]
 async fn main() { 
     let app = Router::new()
@@ -101,6 +116,7 @@ async fn main() {
         .route("/session/del", post(delete_session))
         .route("/user/new", post(create_user))
         .route("/pods/list", get(list_pods))
+        .route("/policy/list", get(list_policy))
         .route("/session/list", {
             list_pods().await;
             get(())
